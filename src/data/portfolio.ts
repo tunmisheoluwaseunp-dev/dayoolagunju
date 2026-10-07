@@ -4,6 +4,9 @@ export const links = {
   linkedin: 'https://ng.linkedin.com/in/dayoolagunju',
 };
 export const copy = {
+  seoTitle: 'Dayo Olagunju — Softr & Airtable Developer',
+  seoDescription: 'Client portals, internal tools and operations systems built on Softr and Airtable by Dayo Olagunju. Book a free 30-minute call.',
+  socialDescription: 'Simple systems for messy operations. Client portals, dashboards and automations built around your team.',
   name: 'Dayo Olagunju', primary: 'Book a free 30-min call', email: 'Email me directly',
   eyebrow: 'Softr + Airtable developer', available: 'Taking new projects',
   heroLines: ['Internal tools &', 'client', 'your team will', 'actually use.'], highlight: 'portals',
@@ -31,6 +34,7 @@ export const copy = {
   tagline: 'Softr & Airtable systems for teams that are done with spreadsheets',
   emailAddress: 'tunmisheoluwaseunp@gmail.com',
   notFoundTitle: 'This page took a wrong turn.', notFoundBody: "The page you're looking for doesn't exist. Let's get you back to Dayo's portfolio.",
+  errorTitle: "This page didn't load", errorBody: 'Something went wrong on our end. You can try refreshing or head back home.', retry: 'Try again',
 };
 export const nav = ['About', 'Services', 'Work', 'Stack', 'FAQ'];
 export const stats = [

@@ -14,10 +14,10 @@ import portrait from '@/assets/dayo-hero.png.asset.json';
 export const Route = createFileRoute('/')({
   component: Index,
   head: () => ({meta: [
-    {title: 'Dayo Olagunju — Softr & Airtable Developer'},
-    {name:'description',content: 'Client portals, internal tools and operations systems built on Softr and Airtable by Dayo Olagunju. Book a free 30-minute call.'},
-    {property:'og:title',content:'Dayo Olagunju — Softr & Airtable Developer'},
-    {property:'og:description',content:'Simple systems for messy operations. Client portals, dashboards and automations built around your team.'},
+    {title: copy.seoTitle},
+    {name:'description',content: copy.seoDescription},
+    {property:'og:title',content:copy.seoTitle},
+    {property:'og:description',content:copy.socialDescription},
     {property:'og:type',content:'website'},
     {property:'og:url',content:'/'},
     {name:'twitter:card',content:'summary_large_image'},

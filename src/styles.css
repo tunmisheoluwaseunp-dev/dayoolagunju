@@ -162,6 +162,8 @@ a { text-decoration: none; }
 button,a,input,select { -webkit-tap-highlight-color: transparent; }
 button:focus-visible,a:focus-visible,select:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
 .portfolio { overflow: clip; background: var(--background); }
+.page-loader { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; min-height: 100dvh; }
+.loading-line { width: 60px; height: 2px; background: linear-gradient(90deg,var(--accent),var(--primary),var(--accent)); background-size: 200%; animation: shimmer 1.5s linear infinite; }
 .container { width: min(1180px, calc(100% - 80px)); margin-inline: auto; }
 .section { padding-block: 100px; }
 .eyebrow { display: block; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--accent); margin-bottom: 18px; }

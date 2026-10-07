@@ -1,24 +1,73 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from '@tanstack/react-router';
+import { useEffect, useRef, useState } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
+import { ArrowUpRight, ArrowRight, ArrowLeft, Layers, Database, Workflow, LockKeyhole, Zap, LayoutDashboard, Boxes, Store, Wrench, FileInput, Table2, MessagesSquare, Copy, CircleHelp, Check, Globe2, MapPin, Award, Quote, Linkedin, Menu, X, CalendarDays, Code2, Palette } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { BookButton, EmailButton, Reveal, Glass, SectionHeading, Count } from '@/components/portfolio/primitives';
+import { CostCalculator } from '@/components/portfolio/calculator';
+import { copy, labels, links, nav, stats, portraitChips, workTraits, tools, problems, services, process, stack, certifications, testimonials, faq } from '@/data/portfolio';
+import { caseStudies, type CaseStudy } from '@/data/caseStudies';
+import portrait from '@/assets/dayo-hero.png.asset.json';
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute('/')({
   component: Index,
+  head: () => ({meta: [
+    {title: 'Dayo Olagunju — Softr & Airtable Developer'},
+    {name:'description',content: 'Client portals, internal tools and operations systems built on Softr and Airtable by Dayo Olagunju. Book a free 30-minute call.'},
+    {property:'og:title',content:'Dayo Olagunju — Softr & Airtable Developer'},
+    {property:'og:description',content:'Simple systems for messy operations. Client portals, dashboards and automations built around your team.'},
+    {property:'og:type',content:'website'},
+    {property:'og:url',content:'/'},
+    {name:'twitter:card',content:'summary_large_image'},
+  ],links:[{rel:'canonical',href:'/'}]}),
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
+const serviceIcons=[LockKeyhole,LayoutDashboard,Boxes,Store,Workflow,Wrench];
+const problemIcons=[Table2,MessagesSquare,Copy,LockKeyhole,CircleHelp];
+function Brand() {return <a href="#top" className="brand" aria-label={copy.name}><span className="brand-mark">D<span/></span><span>{copy.name}<span className="brand-dot">.</span></span></a>;}
 function Index() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
+  const reduced=useReducedMotion(); const [scrolled,setScrolled]=useState(false);const [pastHero,setPastHero]=useState(false);const [menu,setMenu]=useState(false);
+  const [study,setStudy]=useState<CaseStudy|null>(null);const [certificate,setCertificate]=useState<{title:string;imageUrl:string}|null>(null);
+  const [testimonial,setTestimonial]=useState(0);const testimonialRef=useRef<HTMLDivElement>(null);const heroRef=useRef<HTMLElement>(null);
+  useEffect(()=>{const update=()=>{setScrolled(window.scrollY>30);const bottom=heroRef.current?.getBoundingClientRect().bottom??1000;setPastHero(bottom<80);};update();window.addEventListener('scroll',update,{passive:true});return()=>window.removeEventListener('scroll',update);},[]);
+  const changeTestimonial=(direction:number)=>{const next=(testimonial+direction+testimonials.length)%testimonials.length;setTestimonial(next);const element=testimonialRef.current?.children[next];if(element instanceof HTMLElement)testimonialRef.current?.scrollTo({left:element.offsetLeft-(testimonialRef.current?.offsetLeft??0),behavior:reduced?'instant':'smooth'});};
+  return <div className="portfolio" id="top">
+    <a href="#main" className="skip-link">{labels.skip}</a>
+    <header className={`nav-shell ${scrolled?'nav-scrolled':''}`}><div className="container nav-inner"><Brand/><nav className="desktop-nav" aria-label="Main navigation">{nav.map(item=><a key={item} href={`#${item.toLowerCase()}`}>{item}</a>)}</nav><BookButton className="nav-book">{labels.bookShort}</BookButton><Button size="icon" variant="ghost" className="mobile-menu" aria-label={labels.menu} aria-expanded={menu} onClick={()=>setMenu(!menu)}>{menu?<X/>:<Menu/>}</Button></div>{menu&&<nav className="mobile-nav" aria-label="Mobile navigation">{nav.map(item=><a key={item} href={`#${item.toLowerCase()}`} onClick={()=>setMenu(false)}>{item}<ArrowUpRight size={16}/></a>)}</nav>}</header>
+    <main id="main">
+      <section className="hero container" ref={heroRef}>
+        <div className="hero-grid">
+          <div className="hero-copy"><div className="availability"><span className="status-dot"/><span>{copy.eyebrow}</span><span className="availability-divider">·</span><span>{copy.available}</span></div>
+            <h1>{copy.heroLines.map((line,i)=><span className="headline-mask" key={line}><motion.span initial={reduced?false:{y:'110%'}} animate={{y:0}} transition={{duration:.65,delay:i*.12}}>{line}{i===1&&<> <motion.span className="highlight" initial={reduced?false:{clipPath:'inset(0 100% 0 0)'}} animate={{clipPath:'inset(0 0% 0 0)'}} transition={{delay:.45,duration:.65}}>{copy.highlight}</motion.span></>}</motion.span></span>)}</h1>
+            <Reveal delay={.3}><p className="hero-description">{copy.intro}</p><div className="cta-pair"><BookButton/><EmailButton/></div><p className="hero-micro"><span className="tiny-line"/>{copy.micro}</p></Reveal>
+          </div>
+          <motion.div className="portrait-composition" initial={reduced?false:{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:.8,delay:.2}} onMouseMove={e=>{if(reduced)return;const r=e.currentTarget.getBoundingClientRect();e.currentTarget.style.setProperty('--portrait-x',`${(e.clientX-r.left-r.width/2)*.015}px`);e.currentTarget.style.setProperty('--portrait-y',`${(e.clientY-r.top-r.height/2)*.015}px`);}} onMouseLeave={e=>{e.currentTarget.style.setProperty('--portrait-x','0px');e.currentTarget.style.setProperty('--portrait-y','0px');}}>
+            <div className="portrait-outline"/><div className="portrait-amber"><span className="portrait-initial">D.</span></div><div className="portrait-image"><img src={portrait.url} alt="Dayo Olagunju" width={768} height={948} fetchPriority="high"/></div>
+            {portraitChips.map((chip,i)=>{const Icon=[LockKeyhole,Database,Zap][i]??Check;return <div className={`floating-chip chip-${i}`} key={chip}><span><Icon size={17}/></span>{chip}{i===1&&<i className="chip-live"/>}</div>;})}
+            <div className="portrait-caption"><span className="caption-line"/><span>{copy.name}<small>{copy.eyebrow}</small></span><ArrowUpRight size={22}/></div>
+          </motion.div>
+        </div>
+        <Reveal className="stats-strip">{stats.map(stat=><div className="stat" key={stat.label}><strong>{stat.value===null?<span className="placeholder-stat">{labels.placeholder}</span>:<Count value={stat.value} suffix={stat.suffix}/>}</strong><p>{stat.label}</p>{stat.detail&&<small>{stat.detail}</small>}</div>)}</Reveal>
+      </section>
+      <section className="trust-section"><p>{copy.trust}</p><div className="marquee" aria-label={tools.join(', ')}><div className="marquee-track">{[...tools,...tools].map((tool,i)=><span className="tool-wordmark" key={`${tool}-${i}`} aria-hidden={i>=tools.length}>{i%3===0?<Layers/>:i%3===1?<Database/>:<Workflow/>}{tool}</span>)}</div></div></section>
+      <section className="section container" id="empathy"><Reveal><SectionHeading label={copy.empathyLabel} title={copy.empathyTitle}/></Reveal><div className="problems-grid">{problems.map((problem,i)=>{const Icon=problemIcons[i]??CircleHelp;return <Reveal key={problem} delay={i*.05}><Glass className="problem-card"><Icon size={23}/><p>{problem}</p><span className="card-number">0{i+1}</span></Glass></Reveal>;})}</div><Reveal className="section-close"><p>{copy.empathyClose}</p><BookButton/></Reveal></section>
+      <section className="about-section section" id="about"><div className="container about-grid"><Reveal className="about-visual"><div className="about-portrait"><img src={portrait.url} alt="Dayo, Softr and Airtable developer" loading="lazy" width={768} height={948}/></div><div className="about-note"><MapPin size={17}/><span>{copy.timezone}</span></div></Reveal><Reveal><SectionHeading label={labels.about} title={copy.aboutTitle}/><p className="about-text">{copy.about}</p><h3 className="small-heading">{labels.howIWork}</h3><div className="traits">{workTraits.map(trait=><span key={trait}><Check size={13}/>{trait}</span>)}</div><p className="languages"><Globe2 size={17}/>{copy.languages}</p></Reveal></div></section>
+      <section className="section container" id="services"><Reveal><SectionHeading label={labels.services} title={copy.serviceTitle} sub={copy.serviceSub}/></Reveal><div className="services-grid">{services.map((service,i)=>{const Icon=serviceIcons[i]??Layers;return <Reveal key={service.title} delay={(i%3)*.07}><Glass className="service-card"><div className="service-icon"><Icon size={24}/></div><h3>{service.title}</h3><p>{service.description}</p><div className="tags">{service.tags.map(tag=><span key={tag}>{tag}</span>)}</div></Glass></Reveal>;})}</div><Reveal className="section-close service-close"><p><Palette size={17}/>{copy.also}</p><BookButton/></Reveal></section>
+      <section className="planning-section"><Reveal className="container planning-inner"><div className="planning-icon"><Workflow size={40}/></div><div><span className="eyebrow">{copy.empathyClose}</span><h2>{copy.planningTitle}</h2><p>{copy.planning}</p></div><BookButton>{copy.planningCta}</BookButton></Reveal></section>
+      <section className="section container" id="work"><Reveal><SectionHeading label={labels.work} title={copy.workTitle} sub={copy.workSub}/></Reveal><div className="work-grid">{caseStudies.map((item,i)=><Reveal key={item.id} delay={i%2*.1}><Glass className="work-card"><Button variant="ghost" className="work-image" onClick={()=>setStudy(item)} aria-label={`${labels.viewStudy}: ${item.title}`}>{item.imageUrl?<img src={item.imageUrl} alt={item.title} loading="lazy"/>:<div className="screenshot-placeholder"><LayoutDashboard size={32}/><span>{labels.screenshot}</span></div>}<span className="placeholder-badge">{labels.placeholder}</span><span className="view-overlay">{labels.viewStudy}<ArrowUpRight size={18}/></span></Button><div className="work-content"><div className="tags">{item.tags.map(tag=><span key={tag}>{tag}</span>)}</div><h3>{item.title}</h3><dl className="case-fields">{(['challenge','solution','result'] as const).map(field=><div key={field}><dt>{labels[field]}</dt><dd>{item[field]}</dd></div>)}</dl><Button variant="link" className="work-link" onClick={()=>setStudy(item)}>{labels.viewStudy}<ArrowUpRight/></Button></div></Glass></Reveal>)}</div><Reveal className="center-cta"><BookButton/></Reveal></section>
+      <section className="process-section section" id="process"><div className="container"><Reveal><SectionHeading label={labels.process} title={copy.processTitle}/></Reveal><div className="process-grid"><motion.div className="process-line" initial={reduced?false:{scaleX:0}} whileInView={{scaleX:1}} viewport={{once:true}} transition={{duration:1.4}}/>{process.map((step,i)=><Reveal key={step.title} delay={i*.1} className="process-step"><span className="step-number">0{i+1}</span><h3>{step.title}</h3><p>{step.text}</p></Reveal>)}</div><Reveal className="center-cta"><BookButton/></Reveal></div></section>
+      <section className="section container" id="calculator"><Reveal><span className="eyebrow calculator-eyebrow">{copy.calculatorLabel}</span><CostCalculator/></Reveal></section>
+      <section className="section container" id="stack"><Reveal><SectionHeading label={labels.stack} title={copy.stackTitle}/></Reveal><div className="primary-stack">{stack.filter(t=>t.group==='primary').map((tool,i)=><Reveal key={tool.name}><Glass className="stack-primary"><div className={`stack-mark stack-mark-${i}`}>{i===0?<Layers size={36}/>:<Database size={36}/>}</div><h3>{tool.name}</h3><p>{tool.use}</p><ArrowUpRight className="stack-arrow"/></Glass></Reveal>)}</div>{['automation','design'].map(group=><div className="stack-group" key={group}><h3 className="small-heading">{group==='automation'?labels.automation:labels.design}</h3><div className={`stack-grid ${group==='design'?'stack-grid-design':''}`}>{stack.filter(t=>t.group===group).map(tool=><Reveal key={tool.name}><Glass className="stack-card">{group==='design'?<Code2 size={22}/>:<Workflow size={22}/>}<h4>{tool.name}</h4><p>{tool.use}</p></Glass></Reveal>)}</div></div>)}</section>
+      <section className="section container" id="certifications"><Reveal><SectionHeading label={labels.certifications} title={copy.certificationsTitle}/></Reveal><div className="cert-grid">{certifications.map((cert,i)=><Reveal key={i}><Glass className="certificate-card">{cert.imageUrl?<Button variant="ghost" className="certificate-image" onClick={()=>setCertificate(cert)} aria-label={cert.title}><img src={cert.imageUrl} alt={cert.title} loading="lazy"/></Button>:<div className="certificate-placeholder"><Award size={30}/><span>{labels.certificate}</span><small>{labels.placeholder}</small></div>}<h3>{cert.title}</h3><p>{cert.issuer} · {cert.year}</p></Glass></Reveal>)}</div></section>
+      <section className="testimonials-section section"><div className="container"><Reveal><SectionHeading label={labels.testimonials} title={copy.testimonialsTitle}/></Reveal><div className="testimonials-grid" ref={testimonialRef}>{testimonials.map(item=><Glass className="testimonial" key={item.id}><Quote size={27}/><span className="placeholder-badge">{labels.placeholder}</span><blockquote>{item.quote}</blockquote><div className="testimonial-author"><div className="avatar-placeholder"/><div><b>{item.name}</b><p>{item.role} · {item.company}</p></div></div></Glass>)}</div><div className="carousel-controls"><Button size="icon" variant="outline" aria-label={labels.previous} onClick={()=>changeTestimonial(-1)}><ArrowLeft/></Button><span>{testimonial+1} / {testimonials.length}</span><Button size="icon" variant="outline" aria-label={labels.next} onClick={()=>changeTestimonial(1)}><ArrowRight/></Button></div></div></section>
+      <section className="section container faq-section" id="faq"><Reveal className="faq-intro"><SectionHeading label={labels.faq} title={copy.faqTitle}/><CalendarDays size={44} className="text-accent"/></Reveal><Reveal className="faq-list"><Accordion type="single" collapsible>{faq.map((item,i)=><AccordionItem className="faq-item" value={`faq-${i}`} key={item.q}><AccordionTrigger>{item.q}</AccordionTrigger><AccordionContent>{item.a}</AccordionContent></AccordionItem>)}</Accordion><div className="center-cta"><BookButton/></div></Reveal></section>
+      <section className="final-section" id="contact"><Reveal className="container final-inner"><span className="eyebrow">{copy.available}</span><h2>{copy.finalTitle}<span className="final-arrow"><ArrowUpRight/></span></h2><p>{copy.finalSub}</p><div className="cta-pair"><BookButton/><EmailButton/></div><small>{copy.reply}</small></Reveal></section>
+    </main>
+    <footer className="footer"><div className="container"><div className="footer-main"><div><Brand/><p>{copy.tagline}</p></div><nav aria-label="Footer navigation">{nav.map(item=><a key={item} href={`#${item.toLowerCase()}`}>{item}</a>)}</nav><div className="footer-contact"><a href={links.email}>{copy.emailAddress}<ArrowUpRight size={15}/></a><Button variant="outline" size="icon" asChild><a href={links.linkedin} target="_blank" rel="noopener noreferrer" aria-label={labels.linkedin}><Linkedin size={17}/></a></Button></div></div><div className="footer-bottom"><span>© {new Date().getFullYear()} {copy.name}. {labels.rights}</span><span>{copy.eyebrow}</span></div></div></footer>
+    <div className={`sticky-booking ${pastHero?'sticky-visible':''}`}><span className="status-dot"/><span className="sticky-copy">{copy.available}</span><BookButton/></div>
+    <Dialog open={study!==null} onOpenChange={open=>{if(!open)setStudy(null);}}><DialogContent className="case-dialog">{study&&<><span className="eyebrow">{labels.placeholder}</span><DialogTitle>{study.title}</DialogTitle><DialogDescription>{copy.workSub}</DialogDescription><div className="tags">{study.tags.map(tag=><span key={tag}>{tag}</span>)}</div><dl className="case-fields">{(['challenge','solution','result'] as const).map(field=><div key={field}><dt>{labels[field]}</dt><dd>{study[field]}</dd></div>)}</dl><p className="demo-link">{labels.demo}: {study.liveDemoUrl?<a href={study.liveDemoUrl} target="_blank" rel="noopener noreferrer">{study.liveDemoUrl}</a>:labels.placeholder}</p><BookButton/></>}</DialogContent></Dialog>
+    <Dialog open={certificate!==null} onOpenChange={open=>{if(!open)setCertificate(null);}}><DialogContent className="certificate-dialog">{certificate&&<><DialogTitle>{certificate.title}</DialogTitle><DialogDescription>{labels.certifications}</DialogDescription><img src={certificate.imageUrl} alt={certificate.title}/></>}</DialogContent></Dialog>
+  </div>;
 }

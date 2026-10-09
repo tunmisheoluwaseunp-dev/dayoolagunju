@@ -1,2 +1,2 @@
 # Dayo portfolio
-- [ ] Add the supplied featured case study and screenshots without inventing project details.
+- [ ] Add the TALENTA case study after receiving sanitized screenshots; current uploads expose personal information in screenshots 02–07.

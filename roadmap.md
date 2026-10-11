@@ -1,2 +1,4 @@
 # Dayo portfolio
-- [ ] Add the TALENTA case study after receiving sanitized screenshots; current uploads expose personal information in screenshots 02–07.
+- [x] Add the featured TALENTA case study with redacted, responsive screenshots, a detail page, a journey gallery and image lightbox.
+- [x] Keep the four earlier sample case studies in data but unpublished; render published studies only.
+- [ ] Verify TALENTA home card, detail page, responsive layouts and no personal information in screenshots.

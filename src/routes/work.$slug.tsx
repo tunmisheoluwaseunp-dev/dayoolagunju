@@ -79,7 +79,7 @@ function CaseStudyPage() {
       <div className="case-study-meta"><span>{study.role}</span><div className="tags">{study.tags.map((tag) => <span key={tag}>{tag}</span>)}</div></div>
       <p className="case-study-summary">{study.summary}</p>
       <button className="case-image-open case-hero-image" type="button" onClick={() => setLightboxIndex(4)} aria-label="Open worker dashboard screenshot">
-        <BrowserFrame screenshot={study.screenshots[4]} loading="eager"/>
+        <BrowserFrame screenshot={study.screenshots[4]!} loading="eager"/>
       </button>
     </section>
 

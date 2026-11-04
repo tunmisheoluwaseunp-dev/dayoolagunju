@@ -3,9 +3,10 @@ import { ArrowUpRight } from 'lucide-react';
 import { talentaCaseStudy } from '@/data/caseStudies';
 import { BrowserFrame } from '@/components/portfolio/browser-frame';
 
-const dashboard = talentaCaseStudy.screenshots[4];
-const roleChoice = talentaCaseStudy.screenshots[1];
-const consent = talentaCaseStudy.screenshots[3];
+const screenshots = talentaCaseStudy.screenshots;
+const dashboard = screenshots[4]!;
+const roleChoice = screenshots[1]!;
+const consent = screenshots[3]!;
 
 export function FeaturedCaseStudyCard() {
   return <Link className="featured-case-link" to="/work/$slug" params={{ slug: talentaCaseStudy.slug }} aria-label={`View featured case study: ${talentaCaseStudy.title}`}>
